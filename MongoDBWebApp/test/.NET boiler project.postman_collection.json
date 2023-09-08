@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "04f9e1a8-4eef-4319-95ca-e98061a4d129",
+		"name": ".NET boiler project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19929303"
+	},
+	"item": [
+		{
+			"name": "Create View",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"entityName\": \"materials\",\r\n    \"fields\": [\r\n        {\r\n            \"displayName\": \"Receipt Item 1\",\r\n            \"attrName\": \"receiptItem\",\r\n            \"type\": \"string\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5036/api/view",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5036",
+					"path": [
+						"api",
+						"view"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get View",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5036/api/view?id=64d1406eab0641ea3df8886b",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5036",
+					"path": [
+						"api",
+						"view"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "64d1406eab0641ea3df8886b"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
