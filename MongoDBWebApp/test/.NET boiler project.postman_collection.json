@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"entityName\": \"materials\",\r\n    \"fields\": [\r\n        {\r\n            \"displayName\": \"Receipt Item 1\",\r\n            \"attrName\": \"receiptItem\",\r\n            \"type\": \"string\"\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"entityName\": \"<collection_name>\",\r\n    \"fields\": [\r\n        {\r\n            \"displayName\": \"<field_display_name_1>\",\r\n            \"attrName\": \"<field_persisted_name_1>\",\r\n            \"type\": \"string\"\r\n        },\r\n        {\r\n            \"displayName\": \"<field_display_name_n>\",\r\n            \"attrName\": \"<field_persisted_name_n>\",\r\n            \"type\": \"string\"\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -30,6 +30,68 @@
 					"path": [
 						"api",
 						"view"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify View [push]",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"displayName\": \"<field_display_name_NEW>\",\r\n    \"attrName\": \"<field_persisted_name_NEW>\",\r\n    \"type\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5036/api/view/<_id>/push",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5036",
+					"path": [
+						"api",
+						"view",
+						"<_id>",
+						"push"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify View [pull]",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"attrName\": \"<attrName>\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5036/api/view/<_id>/pull",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5036",
+					"path": [
+						"api",
+						"view",
+						"<_id>",
+						"pull"
 					]
 				}
 			},
@@ -53,7 +115,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5036/api/view?id=64d1406eab0641ea3df8886b",
+					"raw": "http://localhost:5036/api/view?id=<_id>",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -66,8 +128,38 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "64d1406eab0641ea3df8886b"
+							"value": "<_id>"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete View",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5036/api/view/<_id>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5036",
+					"path": [
+						"api",
+						"view",
+						"<_id>"
 					]
 				}
 			},

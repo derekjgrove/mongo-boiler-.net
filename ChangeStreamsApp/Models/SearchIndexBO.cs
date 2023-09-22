@@ -10,13 +10,19 @@ public class SearchIndexBO
     const string analyzer = "lucene.keyword";
 
     List<FieldBO> _fields;
+
     public SearchIndexBO(string ns, List<FieldBO> fields)
     {
         _ns = ns;
         _fields = fields;
     }
 
-    private static BsonDocument GenerateCustomAnalyzer() {
+    public SearchIndexBO(string ns)
+    {
+        _ns = ns;
+    }
+
+    private static BsonDocument _GenerateCustomAnalyzer() {
 
         BsonDocument customAnalyzer = new BsonDocument
         {
@@ -34,6 +40,7 @@ public class SearchIndexBO
 
         foreach (var field in _fields)
         {
+            
             fields.Add(new BsonElement(field.AttrName, new BsonDocument{
                 new BsonElement("analyzer", "keyword_lowercaser"),
                 new BsonElement("searchAnalyzer", "keyword_lowercaser"),
@@ -44,14 +51,17 @@ public class SearchIndexBO
         return fields;
     }
 
-    public BsonDocument getSearchIndex() {
+    public BsonDocument getSearchIndex(string op) {
 
-        var cmd = new BsonDocument();
+        var cmd = new BsonDocument
+        {
+            new BsonElement(op, _ns)
+        };
 
-        cmd.Add(new BsonElement("createSearchIndexes", _ns.Split('.')[1]));
-
-        var inx = new BsonDocument();
-        inx.Add(new BsonElement("name", Regex.Replace(_ns+"_Search", @"\.", "_")));
+        var inx = new BsonDocument
+        {
+            new BsonElement("name", Regex.Replace(_ns + "_Search", @"\.", "_"))
+        };
 
         var inxDefinition = new BsonDocument
         {
@@ -63,12 +73,23 @@ public class SearchIndexBO
                     {"fields", _generateFields()},
                 }
             },
-            {"analyzers", new BsonArray(new[] {GenerateCustomAnalyzer()})}
+            {"analyzers", new BsonArray(new[] {_GenerateCustomAnalyzer()})}
         };
 
         inx.Add(new BsonElement("definition", new BsonDocument(inxDefinition)));
 
         cmd.Add(new BsonElement("indexes", new BsonArray(new[] { inx })));
+
+        return cmd;
+    }
+
+    public BsonDocument getDeleteSearchIndex() {
+
+        var cmd = new BsonDocument
+        {
+            new BsonElement("dropSearchIndex", _ns),
+            new BsonElement("name", Regex.Replace(_ns + "_Search", @"\.", "_"))
+        };
 
         return cmd;
     }

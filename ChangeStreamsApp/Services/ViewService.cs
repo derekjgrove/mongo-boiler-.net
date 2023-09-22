@@ -39,12 +39,4 @@ public class ViewService
         return await _viewsCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
     }
 
-    public async Task CreateAsync(ViewBO newView) =>
-        await _viewsCollection.InsertOneAsync(newView);
-
-    public async Task UpdateAsync(string id, ViewBO updatedView) =>
-        await _viewsCollection.ReplaceOneAsync(x => x.Id == id, updatedView);
-
-    public async Task RemoveAsync(string id) =>
-        await _viewsCollection.DeleteOneAsync(x => x.Id == id);
 }

@@ -1,6 +1,7 @@
 using MongoDBWebApp.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace MongoDBWebApp.Services;
 
@@ -30,8 +31,16 @@ public class ViewService
     public async Task CreateAsync(ViewBO newView) =>
         await _viewsCollection.InsertOneAsync(newView);
 
-    public async Task UpdateAsync(string id, ViewBO updatedView) =>
-        await _viewsCollection.ReplaceOneAsync(x => x.Id == id, updatedView);
+    public async Task UpdateAsync(string id, string type, FieldBO updatedView)
+    {
+        var filter = Builders<ViewBO>.Filter.Eq("_id", ObjectId.Parse(id));
+        var update = string.Equals(type, "push", StringComparison.OrdinalIgnoreCase) ?
+            Builders<ViewBO>.Update.Push("fields", updatedView)
+        :
+            Builders<ViewBO>.Update.PullFilter("fields", Builders<BsonDocument>.Filter.Eq("attrName", updatedView.AttrName));
+
+        await _viewsCollection.UpdateOneAsync(filter, update);
+    }
 
     public async Task RemoveAsync(string id) =>
         await _viewsCollection.DeleteOneAsync(x => x.Id == id);

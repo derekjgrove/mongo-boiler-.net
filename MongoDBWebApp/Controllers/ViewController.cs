@@ -38,8 +38,8 @@ public class ViewController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = newView.Id }, newView);
     }
 
-    [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> Update(string id, ViewBO updatedView)
+    [HttpPut("{id:length(24)}/{type:length(4)}")]
+    public async Task<IActionResult> Update(string id, string type, FieldBO updatedView)
     {
         var view = await _viewService.GetAsync(id);
 
@@ -48,9 +48,7 @@ public class ViewController : ControllerBase
             return NotFound();
         }
 
-        updatedView.Id = view.Id;
-
-        await _viewService.UpdateAsync(id, updatedView);
+        await _viewService.UpdateAsync(id, type, updatedView);
 
         return NoContent();
     }

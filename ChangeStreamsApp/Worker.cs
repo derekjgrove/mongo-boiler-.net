@@ -29,21 +29,42 @@ public class Worker
     private async Task insertHelperAsync(string id) {
         var view = await _viewService.GetAsync(id);
 
-        Console.WriteLine("view result " + view);
         if (view is null)
         {
-            // return NotFound();
             Console.WriteLine("Not Found");
         } else
         {
-            SearchIndexBO searchIndexBO = new SearchIndexBO(_collection.CollectionNamespace.ToString(), view.Fields);
-            // Console.WriteLine("searchdefinition " + searchIndexBO.getSearchIndex());
-            var res = await _adminService.RunAsync(searchIndexBO.getSearchIndex());
+            SearchIndexBO searchIndexBO = new SearchIndexBO(view.EntityName, view.Fields);
+            var res = await _adminService.RunAsync(searchIndexBO.getSearchIndex("createSearchIndexes"));
             Console.WriteLine("result --> " + res.ToString());
         }
 
-        
     }
+
+    private async Task updateHelperAsync(string id) {
+        var view = await _viewService.GetAsync(id);
+
+        if (view is null)
+        {
+            Console.WriteLine("Not Found");
+        } else
+        {
+            SearchIndexBO searchIndexBO = new SearchIndexBO(view.EntityName, view.Fields);
+            var res = await _adminService.RunAsync(searchIndexBO.getSearchIndex("updateSearchIndexes"));
+            Console.WriteLine("result --> " + res.ToString());
+        }
+
+    }
+
+    private async Task deleteHelperAsync(BsonDocument deletedView) {
+
+        SearchIndexBO searchIndexBO = new SearchIndexBO(deletedView.GetValue("EntityName").ToString());
+        var res = await _adminService.RunAsync(searchIndexBO.getDeleteSearchIndex());
+        Console.WriteLine("result --> " + res.ToString());
+
+
+    }
+
     public void Start()
     {
         Console.WriteLine($"Worker Start Init at: {DateTimeOffset.Now}");
@@ -71,6 +92,10 @@ public class Worker
                     switch (change.OperationType)
                     {
                         case ChangeStreamOperationType.Update:
+                            Console.WriteLine($"Updated DocumentKey - {change.DocumentKey}");
+                            Console.WriteLine($"Updated Document - {change.FullDocument.ToJson()}");
+
+                            await updateHelperAsync(change.DocumentKey.GetValue("_id").ToString());
                             //Update changes
                             break;
                         case ChangeStreamOperationType.Insert:
@@ -81,6 +106,10 @@ public class Worker
                             //Insert changes
                             break;
                         case ChangeStreamOperationType.Delete:
+                            Console.WriteLine($"Deleted DocumentKey - {change.DocumentKey}");
+                            Console.WriteLine($"Deleted Document - {change.FullDocumentBeforeChange.ToJson()}");
+
+                            await deleteHelperAsync(change.FullDocumentBeforeChange);
                             //Delete changes
                             break;
                         default:

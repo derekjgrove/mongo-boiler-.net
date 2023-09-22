@@ -18,6 +18,6 @@ public class ViewBO
 
     [BsonElement("fields")]
     [JsonPropertyName("fields")]
-    public List<FieldBO>? Fields { get; set; }
+    public FieldBO[]? Fields { get; set; }
 
 }

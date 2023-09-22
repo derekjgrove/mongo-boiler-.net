@@ -9,11 +9,6 @@ public class AdminService
 {
     private readonly IMongoDatabase _mongoDatabase;
 
-    // public ViewService(IMongoCollection<BsonDocument> viewsCollection)
-    // {
-    //     _viewsCollection = viewsCollection.As<ViewBO>();
-    // }
-
         public AdminService(IOptions<AppDatabaseSettings> appDatabaseSettings)
         {
             var mongoClient = new MongoClient(
@@ -23,16 +18,14 @@ public class AdminService
                 appDatabaseSettings.Value.DatabaseName);
 
 
-            Console.WriteLine("Init AdminService " + appDatabaseSettings.Value.ConnectionString);
+            Console.WriteLine("Init AdminService " + appDatabaseSettings.Value.DatabaseName);
         }
 
 
     public async Task<BsonDocument> RunAsync(BsonDocument searchIndex)
     {
-        var command = new BsonDocument { { "serverStatus", 1 } };
+        // var command = new BsonDocument { { "serverStatus", 1 } };
         Console.WriteLine("searchIndex --> " + searchIndex.ToString());
-        // var res = await _mongoDatabase.RunCommandAsync<BsonDocument>(command);
-        // Console.WriteLine("serverstatus res --> " + res.ToString());
 
         try 
         {
